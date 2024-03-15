@@ -1,0 +1,21 @@
+---
+- name: install and configure Jenkins Master on EC2 instance
+  hosts: jenkins-master-server
+  roles:
+    - jenkins
+
+- name: install and configure Jenkins Agent and Docker on EC2 instance
+  hosts: jenkins-agent-server
+  roles:
+    - jenkins
+    - docker
+
+- name: Install and configure SonarQube
+  hosts: sonarqube-server
+  vars:
+    arch_mapping:  # Map ansible architecture {{ ansible_architecture }} names to Docker's architecture names
+      x86_64: amd64
+      aarch64: arm64
+  roles:
+    - sonarqube
+

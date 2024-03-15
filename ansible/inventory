@@ -1,0 +1,8 @@
+[jenkins-master-server]
+18.234.182.134 ansible_ssh_private_key_file=/home/ubuntu/ansible/keys/jenkins-master-key.pem
+
+[jenkins-agent-server]
+54.197.24.54 ansible_ssh_private_key_file=/home/ubuntu/ansible/keys/jenkins-agent-key.pem
+
+[sonarqube-server]
+18.212.127.111 ansible_ssh_private_key_file=/home/ubuntu/ansible/keys/sonarqube-server-key.pem
