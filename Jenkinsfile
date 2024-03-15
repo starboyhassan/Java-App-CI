@@ -19,17 +19,17 @@ pipeline{
                 git branch: 'main', url: 'https://github.com/StarboyHassan/Java-App-CI'
             }
         }
-        stages("Build Application"){
+        stage("Build Application"){
             stages{
                 sh "mvn clean package"
             }
         }
-        stages("Test Application"){
+        stage("Test Application"){
             steps{
                 sh"mvn test"
             }
         }
-        
+
 
     }
     
