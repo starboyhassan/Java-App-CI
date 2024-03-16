@@ -6,8 +6,10 @@ pipeline{
     environment {
         AWS_DEFAULT_REGION = 'us-east-1'
         AWS_ACCOUNT_ID = '767397888237'
-        ECR_REPO_NAME = 'java-project-repo'
+        //ECR_REPO_NAME = 'java-project-repo'
+        APP_IMAGE_NAME = 'java-app'
         IMAGE_TAG = "${env.BUILD_NUMBER}"
+        ECR_REPO = '767397888237.dkr.ecr.us-east-1.amazonaws.com/java-project-repo'
     }
 
     tools{
@@ -64,7 +66,7 @@ pipeline{
                         accessKeyVariable: 'AWS_ACCESS_KEY_ID',
                         secretKeyVariable: 'AWS_SECRET_ACCESS_KEY'
                     ]]) {
-                        sh "aws ecr get-login-password --region ${AWS_DEFAULT_REGION} | docker login --username AWS --password-stdin ${AWS_ACCOUNT_ID}.dkr.ecr.${AWS_DEFAULT_REGION}.amazonaws.com"
+                            sh "(aws ecr get-login-password --region us-east-1) | docker login -u AWS --password-stdin ${ECR_REPO}"
                     }
                 }
             }
@@ -72,7 +74,7 @@ pipeline{
         stage('Build Docker Image') {
             steps {
                 script {
-                    docker.build("${ECR_REPO_NAME}")
+                sh "docker build -t ${ECR_REPO}:${APP_IMAGE_NAME}-${IMAGE_TAG}  ."
 
                 }
             }
@@ -80,7 +82,7 @@ pipeline{
         stage('Push to ECR') {
             steps {
                 script {
-                sh 'docker push ${AWS_ACCOUNT_ID}.dkr.ecr.us-east-1.amazonaws.com/${ECR_REPO_NAME}'             
+                    sh "docker push ${ECR_REPO}:${APP_IMAGE_NAME}-${IMAGE_TAG}"
                    }
             }
         }     
