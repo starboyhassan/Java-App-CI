@@ -1,0 +1,24 @@
+---
+# download eksctl
+- name: Download eksctl installer
+  get_url:
+    url: https://github.com/weaveworks/eksctl/releases/latest/download/eksctl_$(uname -s)_amd64.tar.gz
+    dest: /tmp/eksctl.tar.gz
+
+- name: Extract eksctl installer
+  archive:
+    path: /tmp/eksctl.tar.gz
+    dest: /tmp
+    extract: true
+
+- name: Move eksctl to system path
+  command: sudo mv /tmp/eksctl /bin
+
+# Check eksctl version
+- name: Check Jenkins service status
+  shell: eksctl version
+  register: eksctl_version
+# print eksctl version
+- name: print jenkins version
+  debug:
+    var: eksctl_version

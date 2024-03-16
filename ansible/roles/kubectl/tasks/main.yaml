@@ -1,0 +1,24 @@
+---
+# download kubectl
+- name: Download kubectl binary
+  get_url:
+    url: https://s3.us-west-2.amazonaws.com/amazon-eks/1.27.1/2023-04-19/bin/linux/amd64/kubectl
+    dest: /tmp/kubectl
+
+- name: Set permissions for kubectl
+  file:
+    path: /tmp/kubectl
+    mode: +x
+    state: file
+
+- name: Move kubectl to system path
+  command: sudo mv /tmp/kubectl /bin
+
+# Check kubectl version
+- name: Check kubectl version
+  shell: kubectl version
+  register: kubectl_version
+# print kubectl version
+- name: print kubectl version
+  debug:
+    var: kubectl_version

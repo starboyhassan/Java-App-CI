@@ -4,11 +4,12 @@
   roles:
     - jenkins
 
-- name: install and configure Jenkins Agent and Docker on EC2 instance
+- name: install and configure Jenkins Agent and Docker and AWS CLI on EC2 instance
   hosts: jenkins-agent-server
   roles:
     - jenkins
     - docker
+    - aws_cli
 
 - name: Install and configure SonarQube
   hosts: sonarqube-server
@@ -18,4 +19,11 @@
       aarch64: arm64
   roles:
     - sonarqube
+
+- name: install and configure AWS CLI and kubectl and and eksctl on EC2 ins to work as EKS Bootstrp server
+  hosts: eks-bootstrp-server
+  roles:
+    - aws_cli
+    - kubectl
+    - eksctl
 
