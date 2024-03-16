@@ -4,8 +4,10 @@ pipeline{
     }
 
     environment {
-        ECR_REPO = '767397888237.dkr.ecr.us-east-1.amazonaws.com/java-project-repo'
-        APP_IMAGE_NAME = 'Java-app'
+        AWS_DEFAULT_REGION = 'us-east-1'
+        AWS_ACCOUNT_ID = '767397888237'
+        ECR_REPO_NAME = 'java-project-repo'
+        APP_IMAGE_NAME= 'java-app'
         IMAGE_TAG = "${env.BUILD_NUMBER}"
     }
 
@@ -55,20 +57,27 @@ pipeline{
 
         stage('Build Docker Image') {
             steps {
-                // build and tag images to push them to ECR
-                sh "docker build -t ${ECR_REPO}:${APP_IMAGE_NAME}-${IMAGE_TAG} ."
-            }
-
-        }
-        stage('Push Image to ECR') {
-            steps {
-                withAWS(credentials: "${AmazonWebServicesCredentials-ECR-EKS}"){
-                    sh "(aws ecr get-login-password --region us-east-1) | docker login -u AWS --password-stdin ${ECR_REPO}"
-                    sh "docker push ${ECR_REPO}:${APP_IMAGE_NAME}-${IMAGE_TAG}"
+                script {
+                    docker.build("your_image_name:${env.IMAGE_TAG}")
                 }
             }
-
-        }        
+        }
+        stage('Push to ECR') {
+                    steps {
+                        script {
+                            withCredentials([[
+                                $class: 'AmazonWebServicesCredentialsBinding',
+                                credentialsId: 'AmazonWebServicesCredentials-ECR-EKS',
+                                accessKeyVariable: 'AWS_ACCESS_KEY_ID',
+                                secretKeyVariable: 'AWS_SECRET_ACCESS_KEY'
+                            ]]) {
+                                docker.withRegistry("https://${AWS_ACCOUNT_ID}.dkr.ecr.${AWS_DEFAULT_REGION}.amazonaws.com", 'ecr:AmazonWebServicesCredentials-ECR-EKS') {
+                                    docker.image("${APP_IMAGE_NAME}:${env.IMAGE_TAG}").push("${ECR_REPO_NAME}:${env.IMAGE_TAG}")
+                                }
+                            }
+                        }
+                    }
+                }       
 
         
     }
