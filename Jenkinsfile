@@ -7,7 +7,6 @@ pipeline{
         AWS_DEFAULT_REGION = 'us-east-1'
         AWS_ACCOUNT_ID = '767397888237'
         ECR_REPO_NAME = 'java-project-repo'
-        APP_IMAGE_NAME= 'java-app'
         IMAGE_TAG = "${env.BUILD_NUMBER}"
     }
 
@@ -81,7 +80,7 @@ pipeline{
         stage('Push to ECR') {
             steps {
                 script {
-                    docker.image("${ECR_REPO_NAME}:${env.IMAGE_TAG}").push("${AWS_ACCOUNT_ID}.dkr.ecr.${AWS_DEFAULT_REGION}.amazonaws.com/${ECR_REPO_NAME}:${env.IMAGE_TAG}")
+                    docker.image("${ECR_REPO_NAME}:${env.IMAGE_TAG}").push("${AWS_ACCOUNT_ID}.dkr.ecr.${AWS_DEFAULT_REGION}.amazonaws.com/${ECR_REPO_NAME}")
                 }
             }
         }     
