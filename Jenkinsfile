@@ -58,26 +58,33 @@ pipeline{
         stage('Build Docker Image') {
             steps {
                 script {
-                    docker.build("your_image_name:${env.IMAGE_TAG}")
+                    docker.build("${APP_IMAGE_NAME}:${env.IMAGE_TAG}")
                 }
             }
         }
-        stage('Push to ECR') {
-                    steps {
-                        script {
-                            withCredentials([[
-                                $class: 'AmazonWebServicesCredentialsBinding',
-                                credentialsId: 'AmazonWebServicesCredentials-ECR-EKS',
-                                accessKeyVariable: 'AWS_ACCESS_KEY_ID',
-                                secretKeyVariable: 'AWS_SECRET_ACCESS_KEY'
-                            ]]) {
-                                docker.withRegistry("https://${AWS_ACCOUNT_ID}.dkr.ecr.${AWS_DEFAULT_REGION}.amazonaws.com", 'ecr:AmazonWebServicesCredentials-ECR-EKS') {
-                                    docker.image("${APP_IMAGE_NAME}:${env.IMAGE_TAG}").push("${ECR_REPO_NAME}:${env.IMAGE_TAG}")
-                                }
-                            }
-                        }
+
+        stage('Login to AWS') {
+            steps {
+                script {
+                    withCredentials([[
+                        $class: 'AmazonWebServicesCredentialsBinding',
+                        credentialsId: 'AmazonWebServicesCredentials-ECR-EKS',
+                        accessKeyVariable: 'AWS_ACCESS_KEY_ID',
+                        secretKeyVariable: 'AWS_SECRET_ACCESS_KEY'
+                    ]]) {
+                        sh "aws ecr get-login-password --region ${AWS_DEFAULT_REGION} | docker login --username AWS --password-stdin ${AWS_ACCOUNT_ID}.dkr.ecr.${AWS_DEFAULT_REGION}.amazonaws.com"
                     }
-                }       
+                }
+            }
+        }
+
+        stage('Push to ECR') {
+            steps {
+                script {
+                    docker.image("${APP_IMAGE_NAME}:${env.IMAGE_TAG}").push("${AWS_ACCOUNT_ID}.dkr.ecr.${AWS_DEFAULT_REGION}.amazonaws.com/${ECR_REPO_NAME}:${env.IMAGE_TAG}")
+                }
+            }
+        }     
 
         
     }
