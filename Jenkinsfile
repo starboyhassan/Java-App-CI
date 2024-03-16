@@ -80,7 +80,7 @@ pipeline{
         stage('Push to ECR') {
             steps {
                 script {
-                sh'docker tag ${ECR_REPO_NAME}:${IMAGE_TAG} public.ecr.aws/w7y9l0v2/${ECR_REPO_NAME}:'
+                sh'docker tag ${ECR_REPO_NAME}:${IMAGE_TAG} public.ecr.aws/w7y9l0v2/${ECR_REPO_NAME}:${IMAGE_TAG}'
                 sh 'docker push ${AWS_ACCOUNT_ID}.dkr.ecr.us-east-1.amazonaws.com/${ECR_REPO_NAME}:${IMAGE_TAG}'             
                    }
             }
