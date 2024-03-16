@@ -56,7 +56,7 @@ pipeline{
         stage('Build Docker Image') {
             steps {
                 // build and tag images to push them to ECR
-                sh "docker build -t ${ECR_REPO}:${APP_IMAGE_NAME}-${IMAGE_TAG} ."
+                sh "sudo docker build -t ${ECR_REPO}:${APP_IMAGE_NAME}-${IMAGE_TAG} ."
             }
 
         }
