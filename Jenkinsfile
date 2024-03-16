@@ -58,7 +58,7 @@ pipeline{
         stage('Build Docker Image') {
             steps {
                 script {
-                    docker.build("${APP_IMAGE_NAME}:${env.IMAGE_TAG}")
+                    docker.build("${ECR_REPO_NAME}:${env.IMAGE_TAG}")
                 }
             }
         }
@@ -81,7 +81,7 @@ pipeline{
         stage('Push to ECR') {
             steps {
                 script {
-                    docker.image("${APP_IMAGE_NAME}:${env.IMAGE_TAG}").push("${AWS_ACCOUNT_ID}.dkr.ecr.${AWS_DEFAULT_REGION}.amazonaws.com/${ECR_REPO_NAME}:${env.IMAGE_TAG}")
+                    docker.image("${ECR_REPO_NAME}:${env.IMAGE_TAG}").push("${AWS_ACCOUNT_ID}.dkr.ecr.${AWS_DEFAULT_REGION}.amazonaws.com/${ECR_REPO_NAME}:${env.IMAGE_TAG}")
                 }
             }
         }     
