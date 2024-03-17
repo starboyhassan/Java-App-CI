@@ -16,7 +16,7 @@
 
 # Check kubectl version
 - name: Check kubectl version
-  shell: kubectl version --client
+  shell: kubectl version --client --output=yaml
   register: kubectl_version 
 # print kubectl version
 - name: print kubectl version
