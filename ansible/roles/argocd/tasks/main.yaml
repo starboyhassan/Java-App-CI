@@ -1,0 +1,21 @@
+- name: Create ArgoCD namespace
+  kubernetes.core.k8s:
+    kind: Namespace
+    name: argocd
+    state: present
+
+- name: Apply ArgoCD yaml configuration
+  kubernetes.core.k8s:
+    state: present
+    definition: "{{ lookup('url', 'https://raw.githubusercontent.com/argoproj/argo-cd/stable/manifests/install.yaml') }}"
+    namespace: argocd
+
+- name: Expose argocd-server using LoadBalancer
+  kubernetes.core.k8s:
+    kind: Service
+    name: argocd-server
+    namespace: argocd
+    state: present
+    patch:
+      spec:
+        type: LoadBalancer

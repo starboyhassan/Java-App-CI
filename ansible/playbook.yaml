@@ -28,4 +28,5 @@
     - eksctl
     - helm
     - prometheus-grafana
+    - argocd
 
