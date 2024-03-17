@@ -20,7 +20,7 @@
   roles:
     - sonarqube
 
-- name: install and configure AWS CLI and kubectl and and eksctl on EC2 ins to work as EKS Bootstrp server
+- name: install and Configure EKS Bootstrp server packages
   hosts: eks-bootstrp-server
   roles:
     - aws_cli
