@@ -92,7 +92,6 @@ pipeline{
                script {
                 // delete images from jenkins agent server                    
                     sh "docker rmi ${ECR_REPO}:${APP_IMAGE_NAME}-${IMAGE_TAG}"
-                    sh "docker rmi ${ECR_REPO}:${APP_IMAGE_NAME}-latest"
                }
           }
        }
