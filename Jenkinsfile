@@ -6,7 +6,6 @@ pipeline{
     environment {
         AWS_DEFAULT_REGION = 'us-east-1'
         AWS_ACCOUNT_ID = '767397888237'
-        //ECR_REPO_NAME = 'java-project-repo'
         APP_IMAGE_NAME = 'java-app'
         IMAGE_TAG = "${env.BUILD_NUMBER}"
         ECR_REPO = '767397888237.dkr.ecr.us-east-1.amazonaws.com/java-project-repo'
@@ -94,7 +93,14 @@ pipeline{
                     sh "docker rmi ${IMAGE_NAME}:latest"
                }
           }
-       }        
+       }
+      stage("Trigger CD Pipeline") {
+        steps {
+            script {
+                    sh "curl -v -k --user master:${JENKINS_API_TOKEN} -X POST -H 'cache-control: no-cache' -H 'content-type: application/x-www-form-urlencoded' --data 'IMAGE_TAG=${IMAGE_TAG}' 'ec2-18-232-80-189.compute-1.amazonaws.com:8080/job/java-app-cd/buildWithParameters?token=gitops-token'"
+                }
+            }
+        }        
         
     }
     
