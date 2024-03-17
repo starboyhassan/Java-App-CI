@@ -9,6 +9,8 @@ pipeline{
         APP_IMAGE_NAME = 'java-app'
         IMAGE_TAG = "${env.BUILD_NUMBER}"
         ECR_REPO = '767397888237.dkr.ecr.us-east-1.amazonaws.com/java-project-repo'
+        JENKINS_API_TOKEN = credentials("JENKINS_API_TOKEN")
+
     }
 
     tools{
