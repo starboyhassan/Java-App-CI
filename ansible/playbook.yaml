@@ -26,4 +26,6 @@
     - aws_cli
     - kubectl
     - eksctl
+    - helm
+    - prometheus-grafana
 
