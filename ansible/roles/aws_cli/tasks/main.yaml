@@ -34,4 +34,4 @@
 # print aws version
 - name: print aws version
   debug:
-    var: aws_version
+    var: aws_version.stdout

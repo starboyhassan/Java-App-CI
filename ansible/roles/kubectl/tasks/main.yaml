@@ -16,9 +16,9 @@
 
 # Check kubectl version
 - name: Check kubectl version
-  shell: kubectl version
-  register: kubectl_version
+  shell: kubectl version --client
+  register: kubectl_version 
 # print kubectl version
 - name: print kubectl version
   debug:
-    var: kubectl_version
+    var: kubectl_version.stdout

@@ -6,3 +6,6 @@
 
 [sonarqube-server]
 18.212.127.111 ansible_ssh_private_key_file=/home/ubuntu/ansible/keys/sonarqube-server-key.pem
+
+[eks-bootstrp-server]
+3.84.177.115 ansible_ssh_private_key_file=/home/ubuntu/ansible/keys/eks-bootstrap-key.pem
